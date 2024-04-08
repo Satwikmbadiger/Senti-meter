@@ -12,6 +12,7 @@ textblob = "*"
 scikit-learn = "*"
 nltk = "*"
 numpy = "*"
+flask = "*"
 
 [dev-packages]
 
