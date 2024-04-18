@@ -6,11 +6,9 @@ name = "pypi"
 [packages]
 notebook = "*"
 pandas = "*"
-seaborn = "*"
 matplotlib = "*"
 scikit-learn = "*"
 nltk = "*"
-numpy = "*"
 flask = "*"
 
 [dev-packages]
