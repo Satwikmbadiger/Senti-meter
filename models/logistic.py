@@ -12,37 +12,9 @@ import re
 import pickle
 
 
-# loading the dataset.
-df = pd.read_csv('./datasets/sentiment_analysis.csv')
-print(df.head())
-
-
-texts = df['text']
-print(texts.head())
-
-
-# importing stopwords.
-nltk.download('stopwords')
-print(stopwords.words('english'))
-
-print(df.isnull().sum())
-
-print(df['sentiment'].value_counts())
-
-# mapping each sentiment with a number.
-mapping = {'neutral': 0, 'positive': 1, 'negative': -1}
-df['result'] = df['sentiment'].map(mapping)
-
-
-# ploting the count of sentiments.
-plt.hist(df['result'], color='lightgreen', ec='black', bins=15)
-
-
-port_stem = PorterStemmer()
-# Removing stopwords and stemming the words in each data.
-
-
 def stemming(content):
+    """Removing stopwords and stemming the words in each data."""
+    port_stem = PorterStemmer()
     stemmed_content = re.sub('[^a-zA-Z]', ' ', content)
     stemmed_content = stemmed_content.lower()
     stemmed_content = stemmed_content.split()
@@ -52,34 +24,51 @@ def stemming(content):
     return stemmed_content
 
 
-# calling the stemming function.
-df['stemmed_content'] = df['text'].apply(stemming)
+def main():
+    # loading the dataset.
+    df = pd.read_csv('./datasets/sentiment_analysis.csv')
+    print("Dataset : \n", df.head())
+    print()
 
+    # importing stopwords.
+    nltk.download('stopwords')
+    print(stopwords.words('english'))
 
-x = df['stemmed_content']
-y = df['result']
+    print("\nStats: \n", df.isnull().sum())
 
-# INtializing vectorizer and ferforming feature extraction and saving it.
-vector = TfidfVectorizer()
-pickle.dump(vector, open('./models/logistic_vectorizer.pkl', 'wb'))
-x = vector.fit_transform(x)
+    print("\n", df['sentiment'].value_counts())
 
-# slpliting datasets.
-x_train, x_test, y_train, y_test = train_test_split(
-    x, y, test_size=0.3, random_state=2)
-print(x.shape, x_train.shape, x_test.shape)
-print(y.shape, y_train.shape, y_test.shape)
+    # mapping each sentiment with a number.
+    mapping = {'neutral': 0, 'positive': 1, 'negative': -1}
+    df['result'] = df['sentiment'].map(mapping)
 
+    # ploting the count of sentiments.
+    plt.hist(df['result'], color='lightgreen', ec='black', bins=15)
 
-print(x_train.get_shape())
-print(x_test.get_shape())
+    # calling the stemming function.
+    df['stemmed_content'] = df['text'].apply(stemming)
 
-# training and saving the model.
-model = LogisticRegression(max_iter=1000)
-model.fit(x_train, y_train)
-pickle.dump(model, open('./models/Logistic_Regression.pkl', 'wb'))
+    x = df['stemmed_content']
+    y = df['result']
 
-# prediction on test data.
-pred = model.predict(x_test)
-accuracy = accuracy_score(y_test, pred)
-print(accuracy)
+    # INtializing vectorizer and ferforming feature extraction and saving it.
+    vector = TfidfVectorizer()
+    x = vector.fit_transform(x)
+    pickle.dump(vector, open('./models/logistic_vectorizer.pkl', 'wb'))
+
+    # slpliting datasets.
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.3, random_state=2)
+    print(f"\nX : {x.shape}, X-Train : {x_train.shape}, X-Test : {x_test.shape}")
+    print(f"Y : {y.shape}, Y-Train : {y_train.shape}, Y-Test : {y_test.shape}")
+
+    # training and saving the model.
+    model = LogisticRegression(max_iter=1000)
+    model.fit(x_train, y_train)
+    pickle.dump(model, open('./models/Logistic_Regression.pkl', 'wb'))
+
+    # prediction on test data.
+    pred = model.predict(x_test)
+    accuracy = accuracy_score(y_test, pred)
+    print("\n", accuracy)
+    print('Training complete')
