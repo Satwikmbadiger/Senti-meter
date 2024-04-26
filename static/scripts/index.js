@@ -18,11 +18,11 @@ async function analyzeSentiment() {
     });
 
     const result = await response.json();
-    console.log("Success:", result);
+    console.log(result);
     sentimentResult.innerText = `Sentiment: ${result.score}`;
     sentimentResult.classList.remove("hidden");
   } catch (error) {
-    console.error("Error:", error.message);
+    console.log(error);
   }
 }
 
@@ -31,7 +31,7 @@ const generate = async () => {
   const response = await fetch(
     `https://dummyjson.com/comments/1${Math.floor(Math.random() * 30) + 1}`
   );
-  const text = await response.json();
-  console.log(text.body);
-  textbox.value = text.body;
+  const res = await response.json();
+  console.log(res);
+  textbox.value = res.body;
 };
