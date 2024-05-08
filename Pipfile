@@ -10,6 +10,7 @@ matplotlib = "*"
 scikit-learn = "*"
 nltk = "*"
 flask = "*"
+xgboost = "*"
 
 [dev-packages]
 
