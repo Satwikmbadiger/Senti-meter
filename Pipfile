@@ -11,6 +11,8 @@ scikit-learn = "*"
 nltk = "*"
 flask = "*"
 xgboost = "*"
+google-api-python-client = "*"
+wordcloud = "*"
 
 [dev-packages]
 

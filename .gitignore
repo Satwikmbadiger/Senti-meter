@@ -3,4 +3,4 @@
 .ipynb_checkpoints
 models/*.pkl
 __pycache__
-static/plot.png
+static/*.png
