@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sentiment Analysis</title>
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/YTAnalysis.css') }}"
+    />
+  </head>
+  <body>
+    <div class="Main_title">Youtube Sentiment Analysis</div>
+    <div class="container">
+      <h1>Welcome to Sentiment Analysis</h1>
+      <form id="videoForm" method="post">
+        <label for="video_id">Enter Video ID:</label>
+        <input type="text" id="video_id" name="video_id" required />
+        <button type="submit">Analyze</button>
+      </form>
+
+      <div class="analysis-container">
+        <h2>ANALYSIS</h2>
+        <br />
+        <div id="analysis-result"></div>
+      </div>
+      <div class="comments-container">
+        <h2>COMMENTS</h2>
+        <br />
+        <div id="comments"></div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/YTAnalysis.js') }}"></script>
+  </body>
+</html>

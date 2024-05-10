@@ -1,0 +1,119 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(31, 98, 31);
+    margin: 0;
+    padding: 0;
+  }
+  
+  .Main_title {
+    text-align: center;
+    color: #fff;
+    background-color: #042900;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgb(245, 245, 245);
+    border-radius: 18px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  } 
+
+  h1 {
+    text-align: center;
+    color: #303030;
+    margin-bottom: 25px;
+}
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  input[type="text"] {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    font-size: 16px;
+    width: 70%;
+    margin-bottom: 20px;
+  }
+  
+  button {
+    padding: 15px 30px;
+    background-color: green;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: rgb(23, 140, 23);
+  }
+  
+  .analysis-container,
+  .comments-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .comments-container h2 {
+    color: #303030;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .analysis-container {
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.analysis-container h2 {
+    color: #303030;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+  .comment {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .analysis p,
+  .comment p {
+    margin: 5px 0;
+    color: #333;
+  }
+  
+  .analysis p b,
+  .comment p b {
+    font-size: 18px;
+  }
+  

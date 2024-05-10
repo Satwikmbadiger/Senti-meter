@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sentiment Analysis Results</title>
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/results.css') }}"
+    />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="title-container">
+        <h1 class="title">SENTIMENT ANALYSIS RESULT</h1>
+      </div>
+      <div class="sentiment-distribution">
+        <div class="subtitle-container">
+          <h2 class="subtitle">SENTIMENT DISTRIBUTION</h2>
+        </div>
+        <div class="subsubtitle-container">
+          <div class="sentiment-list-container">
+            <ul class="sentiment-list">
+              {% for sentiment, count in sentiment_counts.items() %}
+              <li>
+                {{ sentiment }}: {{ count }} reviews ({{
+                sentiment_percentages[sentiment]|round(2) }}%)
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="word-cloud-images">
+            <img
+              src="{{ sentiment_bar_plot_path }}"
+              alt="Sentiment Distribution"
+              class="chart-image"
+            />
+            <img
+              src="{{ sentiment_pie_chart_path }}"
+              alt="Sentiment Pie Chart"
+              class="chart-image"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="top-reviews">
+        <div class="subtitle-container">
+          <h2 class="subtitle">TOP REVIEWS IN EACH CATEGORY</h2>
+        </div>
+        {% for sentiment, reviews in top_reviews.items() %}
+        <div class="subsubtitle-container">
+          <h3 class="subsubtitle">{{ sentiment }}</h3>
+        </div>
+        <div class="review-list-container">
+          <ul class="review-list">
+            {% for review in reviews %}
+            <li>{{ review }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="word-clouds">
+        <div class="subtitle-container">
+          <h2 class="subtitle">WORD CLOUDS</h2>
+        </div>
+        <div class="word-cloud-images">
+          {% for wordcloud_path in wordcloud_paths %}
+          <img
+            src="{{ wordcloud_path }}"
+            alt="Word Cloud"
+            class="word-cloud-image"
+          />
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
