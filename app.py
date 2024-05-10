@@ -3,7 +3,9 @@ import re
 from flask import Flask, render_template, request, jsonify
 from models.logistic import stemming
 from nltk.tokenize import word_tokenize
-
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import matplotlib.pyplot as plt
+import matplotlib
 
 app = Flask(__name__)
 
@@ -103,6 +105,75 @@ def analyze_sentiment():
     except Exception as e:
         print(f"Error : {e}")
         return jsonify({'error': str(e)}), 500
+
+
+def map_intensity_to_emotion(score):
+    if score >= 0.5:
+        return 'joy'
+    elif score >= 0.05 and score < 0.5:
+        return 'pleasant'
+    elif score >= -0.05 and score < 0.05:
+        return 'neutral'
+    elif score > -0.5 and score < -0.05:
+        return 'disappointed'
+    else:
+        return 'sad'
+
+
+def generate_reply(emotion):
+    if emotion == 'joy':
+        return "That's great to hear!"
+    elif emotion == 'pleasant':
+        return "I'm glad things are going well for you."
+    elif emotion == 'neutral':
+        return "Hmm, interesting."
+    elif emotion == 'disappointed':
+        return "I'm sorry to hear that."
+    else:
+        return "Oh, that's not good."
+
+
+def analyze_sentiment(text):
+    analyzer = SentimentIntensityAnalyzer()
+    vader_scores = analyzer.polarity_scores(text)
+    emotion = map_intensity_to_emotion(vader_scores['compound'])
+    reply = generate_reply(emotion)
+    return vader_scores, emotion, reply
+
+
+@app.route('/chatbot', methods=['GET', 'POST'])
+def index():
+    matplotlib.use('Agg')
+    if request.method == 'POST':
+        text = request.form['text']
+        vader_scores, emotion, reply = analyze_sentiment(text)
+
+        color = 'grey'
+        alpha = 1.0
+        if vader_scores['compound'] >= 0.1:
+            color = 'green'
+            alpha = 0.7
+        elif vader_scores['compound'] <= -0.1:
+            color = 'red'
+            alpha = 0.9
+
+        plt.figure(figsize=(2, 2))
+        plt.bar(emotion, vader_scores['compound'], color=color, alpha=alpha)
+        plt.xlabel('Emotion')
+        plt.ylabel('Intensity Score')
+        plt.title(f'Intensity of {emotion.capitalize()} in the Text')
+        plt.axhline(0, color='black', linestyle='--', linewidth=0.5)
+        plt.xlim(-1, 1)
+        plt.ylim(-1, 1)
+
+        # Save the plot to a file
+        plot_path = 'static/plot.png'
+        plt.savefig(plot_path)
+        plt.close()
+
+        return jsonify({'reply': reply, 'plot_path': plot_path})
+
+    return render_template('chatbot.html'), 201
 
 
 if __name__ == '__main__':
