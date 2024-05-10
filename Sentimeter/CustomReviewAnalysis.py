@@ -1,70 +1,71 @@
 import pandas as pd
+import re
+from nltk.tokenize import word_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
 import matplotlib.pyplot as plt
+import pickle
 from wordcloud import WordCloud
-from textblob import TextBlob
 
-dataset = pd.read_csv('Reviews.csv', header=None)
-data = pd.DataFrame(dataset)
-data = data.dropna()
+def generate_wordcloud(sentiment, df):
+    text = ' '.join(df[df['Sentiment'] == sentiment]['Preprocessed_data'])
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+    plt.figure(figsize=(5, 3))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.title(f'{sentiment} Sentiment Word Cloud')
+    plt.axis('off')
+    plt.show()
 
-def sentiment_calc(text):
-    analysis = TextBlob(text)
-    polarity = analysis.sentiment.polarity
+def preprocess_data(data):
+    return re.sub(r'[^a-zA-Z\s]', '', data)
 
-    if polarity > 0:
-        return 'Positive', polarity
-    elif polarity < 0:
-        return 'Negative', polarity
-    else:
-        return 'Neutral', polarity
+def tokenize_data(preprocessed_data):
+    return word_tokenize(preprocessed_data)
 
-data['Sentiment'], data['Polarity'] = zip(*data[0].apply(sentiment_calc))
+with open('Sentimeter\\vectorizer.pkl', 'rb') as f:
+    vectorizer = pickle.load(f)
 
-sentiment_counts = data['Sentiment'].value_counts()
+with open('naive_bayes_model.pkl', 'rb') as f:
+    clf = pickle.load(f)
 
-sentiment_percentages = sentiment_counts / len(data) * 100
+def analyze_sentiment(csv_file_path):
+    df = pd.read_csv(csv_file_path, header=None)
 
-plt.bar(sentiment_counts.index, sentiment_counts.values, color=['green', 'red', 'white'])
-plt.title('Sentiment Distribution')
-plt.xlabel('Sentiment')
-plt.ylabel('Count')
-plt.show()
+    df['Preprocessed_data'] = df[0].apply(preprocess_data)
 
-positive_text = ' '.join(data[data['Sentiment'] == 'Positive'][0])
-negative_text = ' '.join(data[data['Sentiment'] == 'Negative'][0])
+    df['Tokens'] = df['Preprocessed_data'].apply(tokenize_data)
 
-positive_wordcloud = WordCloud(width=800, height=400).generate(positive_text)
-negative_wordcloud = WordCloud(width=800, height=400).generate(negative_text)
+    X_bow = vectorizer.transform([' '.join(tokens) for tokens in df['Tokens']])
 
-plt.figure(figsize=(12, 6))
-plt.subplot(1, 2, 1)
-plt.imshow(positive_wordcloud, interpolation='bilinear')
-plt.title('Positive Sentiment Word Cloud')
-plt.axis('off')
+    df['Sentiment'] = clf.predict(X_bow)
 
-plt.subplot(1, 2, 2)
-plt.imshow(negative_wordcloud, interpolation='bilinear')
-plt.title('Negative Sentiment Word Cloud')
-plt.axis('off')
+    for sentiment in df['Sentiment'].unique():
+        generate_wordcloud(sentiment, df)
 
-plt.show()
+    df['Sentiment'].value_counts().plot(kind='bar', color='skyblue')
+    plt.title('Sentiment Distribution')
+    plt.xlabel('Sentiment')
+    plt.ylabel('Count')
+    plt.show()
 
-print('Sentiment Analysis:')
-for sentiment, count in sentiment_counts.items():
-    print(f"{sentiment}: {count} reviews ({sentiment_percentages[sentiment]:.2f}%)")
+    plt.pie(df['Sentiment'].value_counts(), labels=['Positive','Uncertain','Negative','Litigious'], colors=['red', 'green','blue','yellow'], autopct='%1.1f%%', startangle=90)
 
-print('\nTop Positive Reviews:')
-for review in data[data['Sentiment'] == 'Positive'].nlargest(5, 'Polarity')[0]:
-    print(review)
+    sentiment_counts = df['Sentiment'].value_counts()
+    total_reviews = len(df)
+    sentiment_percentages = {sentiment: count / total_reviews * 100 for sentiment, count in sentiment_counts.items()}
 
-print('\nTop Negative Reviews:')
-for review in data[data['Sentiment'] == 'Negative'].nsmallest(5, 'Polarity')[0]:
-    print(review)
+    print("Sentiment Analysis Results:\n")
+    for sentiment, count in sentiment_counts.items():
+        print(f"{sentiment}: {count} reviews ({sentiment_percentages[sentiment]:.2f}%)")
 
-positive_avg_polarity = data[data['Sentiment'] == 'Positive']['Polarity'].mean()
-negative_avg_polarity = data[data['Sentiment'] == 'Negative']['Polarity'].mean()
+    print('\nTop Reviews in Each Sentiment Category:')
+    for sentiment in df['Sentiment'].unique():
+        top_reviews = df[df['Sentiment'] == sentiment][0].head(5)
+        print(f"\nTop {sentiment} Reviews:\n")
+        for review in top_reviews:
+            print(review)
 
-print(f"\nAverage Polarity Score for Positive Reviews: {positive_avg_polarity:.2f}")
-print(f"Average Polarity Score for Negative Reviews: {negative_avg_polarity:.2f}")
+    print("\nSentiment Distribution Pie Chart:")
+    plt.show()
 
-print('\nAnalysis Completed!')
+analyze_sentiment('Reviews.csv')
