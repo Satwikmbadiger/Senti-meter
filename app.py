@@ -1,6 +1,7 @@
 import os
 import pickle
 import re
+import random
 from flask import Flask, render_template, request, jsonify
 from models.logistic import stemming
 from nltk.tokenize import word_tokenize
@@ -128,17 +129,25 @@ def map_intensity_to_emotion(score):
         return 'sad'
 
 
+       
+
 def generate_reply(emotion):
+    list_joy = ["That's great to know!", "Wow! that's fantastic", "Great to hear!", "That's wonderful news!"]
+    list_pleasant = ["I'm glad things are going well for you.", "Hope you are doing great!", "That's nice to hear!"]
+    list_neutral = ["Hmm, interesting.", "That's quite intriguing.", "I see, thanks for sharing.", "Got it, thanks!"]
+    list_disappointed = ["I'm sorry to hear that.", "That's unfortunate.", "I hope things get better soon."]
+    
     if emotion == 'joy':
-        return "That's great to hear!"
+        return random.choice(list_joy)
     elif emotion == 'pleasant':
-        return "I'm glad things are going well for you."
+        return random.choice(list_pleasant)
     elif emotion == 'neutral':
-        return "Hmm, interesting."
+        return random.choice(list_neutral)
     elif emotion == 'disappointed':
-        return "I'm sorry to hear that."
+        return random.choice(list_disappointed)
     else:
         return "Oh, that's not good."
+
 
 
 def analyze_sentiment(text):
