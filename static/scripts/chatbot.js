@@ -54,19 +54,20 @@ function updateSentimentPlot(plotPath) {
 }
 
 function generateRandomNickname() {
-  const nicknames = ["Buddy", "Champ", "Pal", "BFF", "Bae"];
+  const nicknames = ["Buddy", "Champ", "Pal", "Bunty", "Cheeku"];
   const randomIndex = Math.floor(Math.random() * nicknames.length);
   return nicknames[randomIndex];
 }
 
 function generateRandomQuestion() {
   const questions = [
-    "What's your favorite hobby?",
-    "Do you have any pets?",
-    "What's the last book you read?",
-    "What's your favorite movie?",
-    "Do you enjoy cooking?",
-    "What's your dream travel destination?",
+   'What is your take on COD',
+    'What do u think about Cricket',
+    'How do u feel about Engineering',
+    'What do u reckon about DevTrack',
+    'I would like your opinion on Project Cycles',
+    'How do you feel about your current job/schoolwork?'
+    
   ];
   const randomIndex = Math.floor(Math.random() * questions.length);
   return questions[randomIndex];

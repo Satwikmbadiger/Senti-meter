@@ -26,6 +26,25 @@
       defer
     ></script>
 
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-white text-lg font-bold">Senti-Meter</a>
+        <div>
+          <a href="{{url_for('analyze_sentiment')}}" class="text-white mr-4"
+            >Analyze Sentiment</a
+          >
+          <a href="{{url_for('chatbot')}}" class="text-white mr-4">Chatbot</a>
+          <a href="{{url_for('ytanalyze')}}" class="text-white mr-4"
+            >Youtube Analysis</a
+          >
+          <a href="{{url_for('review_analysis')}}" class="text-white mr-4"
+            >Custom Review</a
+          >
+        </div>
+      </div>
+    </nav>
+
     <main>
       <!-- Introduction -->
       <div
@@ -83,53 +102,6 @@
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>
-        </div>
-      </div>
-
-      <!-- Input -->
-      <div class="container mx-auto px-4">
-        <div class="mt-24">
-          <h2 class="text-3xl font-semibold text-gray-800 text-center mb-8">
-            Select Model and Enter your sentiment
-          </h2>
-          <div class="flex flex-col items-center mb-8">
-            <select
-              name="model"
-              id="model"
-              class="w-full p-4 border border-gray-300 rounded-lg mb-4"
-            >
-              <option value="logistic">logistic Regression</option>
-              <option value="bayes">Naive's Bayer</option>
-              <option value="xgboost">XG Boost</option>
-            </select>
-            <textarea
-              name="sentiment"
-              id="sentiment"
-              rows="4"
-              class="w-full p-4 border border-gray-300 rounded-lg mb-4"
-              placeholder="Type your sentiment here..."
-            ></textarea>
-            <div class="flex justify-between w-full">
-              <button
-                type="button"
-                onclick="analyzeSentiment()"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Analyze Sentiment
-              </button>
-              <button
-                type="button"
-                onclick="generate()"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Generate Random Text
-              </button>
-            </div>
-          </div>
-          <div
-            id="sentimentResult"
-            class="hidden mt-4 text-xl font-semibold"
-          ></div>
         </div>
       </div>
     </main>
