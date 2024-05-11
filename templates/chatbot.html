@@ -13,9 +13,37 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/creativetimofficial/tailwind-starter-kit/compiled-tailwind.min.css"
+    />
   </head>
 
   <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-white text-lg font-bold">Senti-Meter</a>
+        <div>
+          <a href="{{url_for('analyze_sentiment')}}" class="text-white mr-4"
+            >Analyze Sentiment</a
+          >
+          <a href="{{url_for('chatbot')}}" class="text-white mr-4">Chatbot</a>
+          <a href="{{url_for('ytanalyze')}}" class="text-white mr-4"
+            >Youtube Analysis</a
+          >
+          <a href="{{url_for('review_analysis')}}" class="text-white mr-4"
+            >Custom Review</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Chatbot -->
     <div class="container mx-auto py-10">
       <div
         class="chat-container bg-white rounded-lg shadow-md flex flex-col md:flex-row"
